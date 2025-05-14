@@ -1,26 +1,7 @@
-import fitz  # PyMuPDF
-import re
-import easyocr
-from PIL import Image
-import numpy as np
-from collections import Counter
-from transformers import BlipProcessor, BlipForQuestionAnswering
 from app.utils import fonts, colors, logo_position, logo_colors
-import torch
-
-# Initialize the reader
-reader = easyocr.Reader(['en'], gpu=False)  # NOTE: I put it in CPU only because I do not have GPU, should be changed for faster performance. 
-
-# Load BLIP VQA model
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-processor = BlipProcessor.from_pretrained("Salesforce/blip-vqa-base")
-model = BlipForQuestionAnswering.from_pretrained("Salesforce/blip-vqa-base").to(device)
 
 
-
-
-
-def assess_slide_compliance(image_path, pdf_path, api_key, company_name):
+def assess_slide_compliance(image_path, pdf_path, api_key):
 
     reasons = {}
     score = 0
@@ -36,7 +17,7 @@ def assess_slide_compliance(image_path, pdf_path, api_key, company_name):
     score += score_logo_position
 
     # 3. Logo Colors 
-    score_logo_color, explanation_logo_color = logo_colors.check_logo_colors(pdf_path, image_path, company_name)
+    score_logo_color, explanation_logo_color = logo_colors.check_logo_colors(pdf_path, image_path)
     reasons["Logo Color"] = explanation_logo_color
     score += score_logo_color
     
@@ -49,14 +30,12 @@ def assess_slide_compliance(image_path, pdf_path, api_key, company_name):
    
 
 # Main
-def assessmentllm(slide_image_path, brand_pdf_path, api_key, company_name):
-    '''brand_text = extract_brand_kit_text(brand_pdf_path)
-    score, feedback = assess_slide_compliance(slide_image_path, brand_pdf_path, api_key, company_name)
+def assessmentllm(slide_image_path, brand_pdf_path, api_key):
+    score, feedback = assess_slide_compliance(slide_image_path, brand_pdf_path, api_key)
     print(f"--- Brand Compliance Score: {score}/4 ---\n")
     for category, reason in feedback.items():
-        print(f"{category}: {reason}")'''
-    score = 4
-    feedback = "it works"
+        print(f"{category}: {reason}")
+    
     return score, feedback
 
 

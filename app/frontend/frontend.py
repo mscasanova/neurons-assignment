@@ -11,16 +11,14 @@ def main():
     st.write("Upload an image and a brand kit PDF to assess brand alignment.")
 
     # File inputs
-    image_file = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
+    image_file = st.file_uploader("Please upload the image file you want to assess", type=["jpg", "jpeg", "png"])
     if not image_file:
         st.error("Please upload an image file.")
         return
 
 
-    pdf_file = st.file_uploader("Upload PDF", type=["pdf"])
+    pdf_file = st.file_uploader("Upload the brandkit PDF", type=["pdf"])
 
-    # Text inputs for API key and company name
-    company_name = st.text_input("Company Name")
 
     # Submit button
     if st.button("Submit"):
@@ -31,10 +29,6 @@ def main():
         if not pdf_file:
             st.error("Please upload a PDF file.")
             return
-        
-        if not company_name:
-            st.error("Please provide the company name.")
-            return
 
         # Notify the user that the process might take time
         with st.spinner("Processing your request. This may take a few minutes..."):
@@ -43,13 +37,11 @@ def main():
                 "image": (image_file.name, image_file, image_file.type),
                 "pdf": (pdf_file.name, pdf_file, pdf_file.type),
             }
-            data = {
-                "company_name": company_name,
-            }
+
 
             # Send the request to the FastAPI backend
             try:
-                response = requests.post(BACKEND_URL, files=files, data=data)
+                response = requests.post(BACKEND_URL, files=files)
                 response_data = response.json()
 
                 if response.status_code == 200:

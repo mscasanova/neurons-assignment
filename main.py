@@ -5,8 +5,6 @@ import shutil
 import os
 
 app = FastAPI(title="Brand Compliance Checker")
-#TODO: Delete this line, key should be in env
-API_KEY = "AIzaSyBlNd7irVUwoIzFKnZESzstsDc7RBUnZnk"  # Replace with your API key
 
 # Define a function to return a description of the app
 def get_app_description():
