@@ -87,13 +87,13 @@ def analyze_colors(pdf_path, slide_path):
     - 1 if colors comply with the brand kit.
     - 0 otherwise.
     """
-    # Step 1: Extract colors from the brand kit PDF
+    # Extract colors from the brand kit PDF
     pdf_colors = extract_colors_from_pdf(pdf_path)
 
-    # Step 2: Extract colors used in the slide image
+    # Extract colors used in the slide image
     slide_colors = extract_colors_from_slide(slide_path)
 
-    # Step 3: Use LLM to analyze color compliance
+    # Use LLM to analyze color compliance
     score, explanation = analyze_colors_with_llm(pdf_colors, slide_colors)
 
     return score, explanation
