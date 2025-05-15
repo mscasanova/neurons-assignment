@@ -1,58 +1,52 @@
-import streamlit as st
+# Task a) Replace Streamlit frontend with Gradio + custom styling
+import gradio as gr
 import requests
 
+API_URL = "http://127.0.0.1:8000/upload/"
+COMPANY_LOGO = "company_logo.png"
+PRIMARY_COLORS = ["#85A0FE", "#FE839C", "#FFD14C", "#AA82FF", "#380F57"]
 
-# Set the FastAPI backend URL
-BACKEND_URL = "http://127.0.0.1:8000/upload/"
+def assess_brand_compliance(image, pdf, company_name):
+    files = {
+        "image": (image.name, image, "image/png"),
+        "pdf": (pdf.name, pdf, "application/pdf"),
+    }
+    data = {"company_name": company_name}
 
-# Streamlit App
-def main():
-    st.title("Brand Assessment API")
-    st.write("Upload an image and a brand kit PDF to assess brand alignment.")
+    try:
+        response = requests.post(API_URL, files=files, data=data)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return {"error": f"Server returned {response.status_code}: {response.text}"}
+    except Exception as e:
+        return {"error": str(e)}
 
-    # File inputs
-    image_file = st.file_uploader("Please upload the image file you want to assess", type=["jpg", "jpeg", "png"])
-    if not image_file:
-        st.error("Please upload an image file.")
-        return
+def create_interface():
+    css = f"""
+    body {{
+        background-color: {PRIMARY_COLORS[0]};
+        font-family: 'Segoe UI', sans-serif;
+        color: {PRIMARY_COLORS[4]};
+    }}
+    .gradio-container {{
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 0 12px rgba(0,0,0,0.1);
+        background-color: white;
+    }}
+    """
+    with gr.Blocks(css=css, theme=gr.themes.Soft()) as demo:
+        gr.Markdown("# <img src='company_logo.png' width='50'/> Brand Compliance Assessment Tool")
+        gr.Markdown("Upload your creative and brand kit for compliance scoring.")
+        with gr.Row():
+            image_input = gr.File(label="Slide Image", file_types=[".jpg", ".jpeg", ".png"])
+            pdf_input = gr.File(label="Brand Kit PDF", file_types=[".pdf"])
+            company_input = gr.Textbox(label="Company Name")
+        output = gr.JSON(label="Results")
+        submit = gr.Button("Assess Brand Compliance", variant="primary")
+        submit.click(fn=assess_brand_compliance, inputs=[image_input, pdf_input, company_input], outputs=output)
+    return demo
 
-
-    pdf_file = st.file_uploader("Upload the brandkit PDF", type=["pdf"])
-
-
-    # Submit button
-    if st.button("Submit"):
-        # Input validation
-        if not image_file:
-            st.error("Please upload an image file.")
-            return
-        if not pdf_file:
-            st.error("Please upload a PDF file.")
-            return
-
-        # Notify the user that the process might take time
-        with st.spinner("Processing your request. This may take a few minutes..."):
-            # Prepare files and data for the request
-            files = {
-                "image": (image_file.name, image_file, image_file.type),
-                "pdf": (pdf_file.name, pdf_file, pdf_file.type),
-            }
-
-
-            # Send the request to the FastAPI backend
-            try:
-                response = requests.post(BACKEND_URL, files=files)
-                response_data = response.json()
-
-                if response.status_code == 200:
-                    st.success("Request processed successfully!")
-                    st.write("### Result:")
-                    st.json(response_data)
-                else:
-                    st.error("Error occurred:")
-                    st.json(response_data)
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    create_interface().launch()
