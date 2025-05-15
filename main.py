@@ -24,8 +24,7 @@ async def root():
 @app.post("/upload/")
 async def upload_files(
     image: UploadFile = File(...),
-    pdf: UploadFile = File(...),
-    company_name: str = Form(...)
+    pdf: UploadFile = File(...)
 ):
     try:
         # Notify the user that the process may take a few minutes
