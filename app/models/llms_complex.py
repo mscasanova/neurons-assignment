@@ -2,6 +2,15 @@ from app.utils import fonts, colors, logo_position, logo_colors
 
 
 def assess_slide_compliance(image_path, pdf_path, api_key):
+    """
+    Calls all functions to asssess one by one if brand criteria is met.
+
+    pdf_path: Path to the pdf file.
+    slide_path:  Path to the slide image to be assessed.
+    api_key: apy key to extract font names from Google Fonts API.
+
+    Returns: total score [0,4], and dictionary of explanations. 
+    """
 
     reasons = {}
     score = 0
@@ -46,6 +55,15 @@ def assess_slide_compliance(image_path, pdf_path, api_key):
 
 # Main
 def assessmentllm(slide_image_path, brand_pdf_path, api_key):
+    """
+    Main function for final assessment.
+
+    brand_pdf_path: Path to the pdf file.
+    slide_image_path:  Path to the slide image to be assessed.
+    api_key: apy key to extract font names from Google Fonts API.
+
+    Returns: total score [0,4], and dictionary of explanations. 
+    """
     score, feedback = assess_slide_compliance(slide_image_path, brand_pdf_path, api_key)
     print(f"--- Brand Compliance Score: {score}/4 ---\n")
     for category, reason in feedback.items():
