@@ -8,13 +8,15 @@ import requests
 import matplotlib.font_manager as fm
 from os.path import basename, splitext
 import numpy as np
+import os
 
 
 
 def fetch_google_fonts(api_key):
     """
     Fetch font family names from Google Fonts API.
-    Returns a list of font names.
+
+    Returns: list of font names.
     """
     try: 
         response = requests.get(f"https://www.googleapis.com/webfonts/v1/webfonts?key={api_key}")
@@ -28,6 +30,8 @@ def fetch_google_fonts(api_key):
 def get_system_fonts():
     """
     Retrieve a list of system-installed font names by parsing font file paths.
+
+    Returns: list of font names.
     """
     try:
         # Extract font names from file paths
@@ -41,6 +45,10 @@ def get_system_fonts():
 def build_known_fonts(api_key):
     """
     Combine fonts from Google Fonts API and system-installed fonts.
+
+    api_key: apy key to extract font names from Google Fonts API.
+
+    Returns: list of combined font names.
     """
     google_fonts = fetch_google_fonts(api_key)
     system_fonts = get_system_fonts()
@@ -58,7 +66,12 @@ def build_known_fonts(api_key):
 def analyze_slide_fonts(slide_path, model, api_key):
     """
     Analyze fonts used in the slide image using a vision transformer (ViT) model.
-    Returns a set of predicted font names.
+
+    slide_path: path to image to be assessed. 
+    model: llm model to be used to assess. 
+    api_key: apy key to extract font names from Google Fonts API. 
+    
+    Returns: set of predicted font names.
     """
     try:
         image = Image.open(slide_path).convert("RGB")
@@ -89,7 +102,11 @@ def analyze_slide_fonts(slide_path, model, api_key):
 def extract_written_fonts_from_image(image, api_key):
     """
     Extract font names written explicitly in a slide image using EasyOCR.
-    Returns a set of font names if detected.
+
+    image: image to be assessed.
+    api_key: apy key to extract font names from Google Fonts API.
+
+    Returns: set of font names if detected.
     """
     try: 
         reader = easyocr.Reader(['en'])
@@ -114,9 +131,13 @@ def extract_written_fonts_from_image(image, api_key):
 
 def analyze_pdf_fonts(pdf_path, model, api_key):
     """
-    Analyze fonts used in a PDF file by converting each page to an image
-    and using the `analyze_slide_fonts` function for font detection.
-    Returns a set of all fonts detected across the PDF.
+    Analyze fonts used in a PDF file by converting each page to an image and using the `analyze_slide_fonts` function for font detection.
+
+    pdf_path: path to brand kit pdf. 
+    model: llm model to be used to assess. 
+    api_key: apy key to extract font names from Google Fonts API.
+
+    Returns: set of all fonts detected across the PDF.
     """
     try:
         detected_fonts = set()
@@ -150,8 +171,12 @@ def analyze_pdf_fonts(pdf_path, model, api_key):
 
 def compare_fonts(pdf_fonts, slide_fonts):
     """
-    Compare fonts from the PDF and slide image.
-    Returns (1, explanation) if fonts match, otherwise (0, explanation).
+    Compare fonts from the PDF and slide image to be assessed.
+
+    pdf_fonts: list of fonts from pdf. 
+    slide_fonts: list of fonts from slide image to be assessed. 
+
+    Returns: (1, explanation) if fonts match, otherwise (0, explanation).
     """
     if slide_fonts.issubset(pdf_fonts):
         return 1, "All fonts used in the slide are present in the brandkit PDF."
@@ -164,6 +189,15 @@ def compare_fonts(pdf_fonts, slide_fonts):
 
 
 def verify_fonts(pdf_path, slide_path, api_key):
+    """
+    Determines if the the fonts used in the image to be assessed are correct.
+    
+    pdf_path: Path to the pdf file.
+    slide_path:  Path to the slide image to be assessed.
+    api_key: apy key to extract font names from Google Fonts API.
+
+    Returns: 1 if it uses the proper colors, 0 if not. And a text explaining. 
+    """
     # Load a pre-trained vision-based model
     model = models.resnet18(pretrained=True)
     model.eval()

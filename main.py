@@ -59,12 +59,3 @@ async def upload_files(
 
 
 
-
-
-
-'''brandkit_pdf_path = "Neurons_brand_kit.pdf"
-# Load query image
-image_path = "neurons_1.png"
-company_name = "Neurons"
-llms_complex.assessmentllm(image_path, brandkit_pdf_path, API_KEY, company_name)
-'''
