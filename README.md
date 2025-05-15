@@ -1,19 +1,19 @@
 # AI Brand Compliance Checker
 
-Welcome to the **AI Brand Compliance Checker**, a multimodal assessment tool that uses cutting-edge deep learning and large language models (LLMs) to evaluate whether marketing materials adhere to a brand's visual identity guidelines.
+Welcome to the **AI Brand Compliance Checker**, a multimodal assessment tool that uses cutting-edge deep learning and large language models (LLMs) to evaluate whether marketing materials follow to a brand's visual identity guidelines.
 
 ---
 
 ## 🚀 What Does It Do?
 
-This tool assesses the **brand compliance** of uploaded creative materials (like slides or banners) against an official **brand kit (PDF)**. It performs the following checks:
+This tool assesses the **brand compliance** of uploaded creative materials (like slides or banners), in imge format, against an official **brand kit (PDF)**. It performs the following checks:
 
-- ✅ **Font Matching** – Ensures font usage aligns with your brand.
-- ✅ **Logo Position & Size** – Checks placement and sizing against guidelines.
-- ✅ **Logo Colors** – Validates logo colors against the brand palette.
-- ✅ **Overall Color Palette** – Compares slide colors with those defined in the brand kit.
+- **Font Matching** – Ensures font usage aligns with your brand.
+- **Logo Position & Size** – Checks placement and sizing against guidelines.
+- **Logo Colors** – Validates logo colors against the brand palette.
+- **Overall Color Palette** – Compares slide colors with those defined in the brand kit.
 
-The result is a **score out of 4** with detailed reasoning.
+The result is a **score out of 4**, one point for each criteria that the material is following correctly.
 
 ---
 
@@ -121,4 +121,4 @@ curl -X POST "http://localhost:8000/upload/" \
 ---
 
 ## 🧠 Authors
-- Developed by [Your Name / Team / Org]
+- Developed by Laura Casanovas i Buliart
