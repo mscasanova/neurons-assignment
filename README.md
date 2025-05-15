@@ -30,6 +30,7 @@ The result is a **score out of 4**, one point for each criteria that the materia
 │   │   └── logo_position.py
 │   └── frontend/
 │       └── frontend.py
+│       └── company_logo.png
 ├── main.py
 ├── tests.py
 ├── Dockerfile
