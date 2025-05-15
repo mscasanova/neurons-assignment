@@ -19,8 +19,5 @@ matplotlib==3.8.3
 scikit-learn==1.4.2
 scikit-image==0.22.0
 gradio==4.25.0
-<<<<<<< HEAD
 pytest==8.1.1
-=======
-pytest==8.1.1
->>>>>>> 5ec55d9d26bd4d879864c3181e4d237be1cd0fea
+
