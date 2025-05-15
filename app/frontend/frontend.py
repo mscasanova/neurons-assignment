@@ -2,7 +2,7 @@ import gradio as gr
 import requests
 
 API_URL = "http://127.0.0.1:8000/upload/"
-COMPANY_LOGO = "https://github.com/mscasanova/neurons-assignment/blob/main/app/frontend/company_logo.png"
+COMPANY_LOGO_URL = "https://github.com/mscasanova/neurons-assignment/blob/main/app/frontend/company_logo.png?raw=true" # Use the raw URL for direct access
 PRIMARY_COLORS = ["#85A0FE", "#FE839C", "#FFD14C", "#AA82FF", "#380F57"]  # Blue, Pink, Yellow, Purple, Dark
 
 def assess_brand_compliance(image, pdf):
@@ -54,7 +54,7 @@ def create_interface():
 
     h1 img {{
         vertical-align: middle;
-        height: 40px;
+        height: 30px; /* Reduced the height from 40px to 30px */
     }}
 
     .gr-button-primary {{
@@ -70,8 +70,8 @@ def create_interface():
     """
 
     with gr.Blocks(css=css, theme=gr.themes.Soft()) as demo:
-        with gr.Column():
-            gr.Image(value=COMPANY_LOGO, show_label=False, interactive=False, height=60)
+        with gr.Column(elem_id="header"):
+            gr.Image(value=COMPANY_LOGO_URL, show_label=False, interactive=False, height=30) # Also adjusted here for consistency
             gr.HTML("<h1>Brand Compliance Assessment Tool</h1>")
         gr.Markdown(f"<span style='color: {PRIMARY_COLORS[3]}; font-size: 1.1em;'>Upload your creative and brand kit for compliance scoring.</span>")
 
